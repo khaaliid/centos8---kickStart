@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: timescaledb
+  selector:
+    app: timescaledb
+
+---
+    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timescaledbdep
+spec:
+  selector:
+    matchLabels:
+      app: timescaledb
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+    spec:
+      containers:
+      - image: as1998aufal02.etisalat.corp.ae/newbillingapp/timescale/timescaledb:latest-pg11
+        name: timescaledb
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /test
+          name: test-volume
+        env:
+          - name: POSTGRES_PASSWORD
+            value: password
+      volumes:
+      - name: test-volume
+        hostPath:
+          path: /data
+          type: DirectoryOrCreate
+          
+          
+          
