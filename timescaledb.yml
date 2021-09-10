@@ -31,7 +31,8 @@ spec:
         app: timescaledb
     spec:
       containers:
-      - image: as1998aufal02.etisalat.corp.ae/newbillingapp/timescale/timescaledb:latest-pg11
+        imagePullPolicy: Never      
+      - image: timescale/timescaledb:latest-pg11
         name: timescaledb
         ports:
         - containerPort: 5432
