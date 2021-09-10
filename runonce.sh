@@ -148,7 +148,6 @@ kubeadm init --cri-socket /run/containerd/containerd.sock
 
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bashrc
 
-kubectl apply -k /root/extras/kustomize/my-deployment
 kubectl apply -f /root/extras/yamls/timescaledb.yml
 
 fi
