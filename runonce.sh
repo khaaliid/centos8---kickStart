@@ -3,19 +3,26 @@
 if [ -e /tmp/runonce ]
 then
 
+   touch /tmp/runonce.log
    rm -f /tmp/runonce
-   echo "**** installing k8s ****"
+   echo "**** installing bind ****" >> /tmp/runonce.log
+
+   yum install -y --cacheonly --disablerepo=* /root/extras/bindRepo/Packages/*.rpm
+
+   echo "**** installing k8s ****" >> /tmp/runonce.log
 
    yum install -y --cacheonly --disablerepo=* /root/extras/k8sRepo/Packages/*.rpm
 
    yum remove -y runc
 
-   echo "**** installing containerd ****"
+   echo "**** installing containerd ****" >> /tmp/runonce.log
 #   yum install -y --cacheonly --disablerepo=* /root/extras/dockerCeRepo/Packages/*.rpm
    yum install -y --cacheonly --disablerepo=* /root/extras/dockerCeCliRepo/Packages/*.rpm
 #   yum remove -y runc
    yum install -y --cacheonly --disablerepo=* /root/extras/containerdRepo/Packages/*.rpm
    
+   echo "**** configuring containerd ****" >> /tmp/runonce.log
+
    cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
    overlay
    br_netfilter
@@ -44,6 +51,8 @@ sed -i "/.containerd\.runtimes\.runc\.options/ a \\\t\t\tSystemdCgroup = true" /
 systemctl enable containerd
 systemctl start containerd
 
+echo "***** containerd started *****" >> /tmp/runonce.log
+
 cd /root/extras
 tar -xvf /root/extras/containerd-1.5.4-linux-amd64.tar.gz
 
@@ -58,11 +67,17 @@ tar -xvf /root/extras/containerd-1.5.4-linux-amd64.tar.gz
 /root/extras/bin/ctr i import /root/extras/images/etcd-3.5.0-0.tar
 /root/extras/bin/ctr i import /root/extras/images/timescaledb-latest-pg11.tar
 
+echo "**** images uploaded ****" >> /tmp/runonce.log
+
 systemctl start named
+
+echo "**** DNS component started ****" >> /tmp/runonce.log
 
 sed -i 's/listen-on\ port\ 53/\/\/listen-on\ port\ 53/' /etc/named.conf
 sed -i  's/listen-on-v6\ port/\/\/listen-on-v6 port/' /etc/named.conf
 sed -i  's/localhost/localhost\;192\.168\.1\.0\/24/g' /etc/named.conf
+
+echo "**** DNS configurations are done****" >> /tmp/runonce.log
 
 cat <<EOF >>  /etc/named.conf
 //Forward Zone
@@ -136,6 +151,8 @@ EOF
 
 systemctl restart named
 
+echo "**** DNS component restarted ****" >> /tmp/runonce.log
+
 swapoff -a
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -143,12 +160,26 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 
-kubeadm init --cri-socket /run/containerd/containerd.sock
+echo "**** setting up K8s via kubeadm tool ****" >> /tmp/runonce.log
+
+nmcli connection up enp0s3
+
+swapoff -a
+
+kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket /run/containerd/containerd.sock
 
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bashrc
 
+source ~/.bashrc
+
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+kubectl apply -f /root/extras/yamls/kube-flannel.yml
 kubectl apply -f /root/extras/yamls/timescaledb.yml
 
+echo "Done !" >> /tmp/runonce.log
+
+ 
 fi
 
 exit

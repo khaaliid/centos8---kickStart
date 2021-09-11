@@ -31,8 +31,8 @@ spec:
         app: timescaledb
     spec:
       containers:
-        imagePullPolicy: Never      
       - image: timescale/timescaledb:latest-pg11
+        imagePullPolicy: IfNotPresent 
         name: timescaledb
         ports:
         - containerPort: 5432
