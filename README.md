@@ -5,15 +5,19 @@ If you are not using the same Centos OS version, the recommended approach to cre
 Procedures :
 
 1-	Download the DVD ISO file (CentOS-8.4.2105-x86_64-dvd1.iso).
+
 2-	Login to the server we will customize the ISO image in as root (alternatively you can use sudo in the following commands).
+
 3-	Upload the downloaded ISO file to any location in the server (ensure to have sufficient storage in the server as the Centos ISO image is around 9GB in size). Following I will assume we placed the file in (/tmp).
+
 4-	Mount the Iso file.
+
 a.	Create mount point.
 mkdir -p /mnt/centos
 b.	Mount the iso to the mountpoint.
 mount -o loop /tmp/CentOS-8.4.2105-x86_64-dvd1.iso /mnt/centos 
 c.	Ensure the iso image is mounted.
-# df -h
+> df -h
 Filesystem                     Size  Used    Avail   Use%    Mounted on
 /tmp/CentOS-8.4.2105-x86_64-dvd1.iso 9.3G  9.3G     0       100%    /mnt/centos
 
@@ -71,10 +75,14 @@ mkdir /data/custom_iso/extras
 12- change the isolinux/isolinux.cfg comment the existing append command to be as below to froce execute the kickstart file.
 
 label linux
+
   menu label ^Auto Install CentOS Linux 8 with k8s
+  
   kernel vmlinuz
+\# add below line to point to the kickstart file  
   append initrd=initrd.img inst.repo=cdrom ks=cdrom:/ks.cfg quiet
-#  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS-8-4-2105-x86_64-dvd quiet
+\#comment below line  
+\# append initrd=initrd.img inst.stage2=hd:LABEL=CentOS-8-4-2105-x86_64-dvd quiet
 
 13- recreate the iso image.
 cd /data/custom_centos
