@@ -23,17 +23,17 @@ Filesystem                     Size  Used    Avail   Use%    Mounted on
 
 
 5-	Create another directory to be the working directory to customize the ISO Image
-mkdir -p /data/custom_centos
+> mkdir -p /data/custom_centos
 6-	Copy everything from the ISO image to the working directory (except the RPM directories).
-rsync -av --progress /mnt/ /data/custom_centos/
+> rsync -av --progress /mnt/ /data/custom_centos/
 
 7- copy the hidden files as well 
 
-cp -vf /mnt/.??* /data/custom_iso/
+> cp -vf /mnt/.??* /data/custom_iso/
 
 8- create extras drectory under the custom_iso directory
 
-mkdir /data/custom_iso/extras
+> mkdir /data/custom_iso/extras
 
 9- Add the ks.cfg under /data/custom_iso/ dir.
 
@@ -45,15 +45,15 @@ mkdir /data/custom_iso/extras
  
 	a- create containerdRepo/Packages dir under extra directory and add all the required containerd RPMs under it.
 		- I get the required RPMs by running following command 
-			yumdownloader --assumeyes --destdir=/data/custom_iso/extras/containerdRepo/Packages --resolve containerd
+			> yumdownloader --assumeyes --destdir=/data/custom_iso/extras/containerdRepo/Packages --resolve containerd
 		- create the repo to be used during the installation :
-				cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
+				> cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
 		  
 	b- create k8sRepo/Packages dir under extra directory and add all the required containerd RPMs under it.
 		- I get the required RPMs by running following command
-			yumdownloader --assumeyes --destdir=/data/custom_iso/extras/k8sRepo/Packages --resolve yum-utils kubeadm-1.22.1
+			> yumdownloader --assumeyes --destdir=/data/custom_iso/extras/k8sRepo/Packages --resolve yum-utils kubeadm-1.22.1
 		- create the repo to be used during the installation :
-			cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
+			> cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
 	
  2. Images :
  
@@ -86,5 +86,5 @@ label linux
 
 13- recreate the iso image.
 cd /data/custom_centos
-mkisofs -o <location of the new iso>/customCentos.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "custom CentOS 8 x86_64" -R -J -v -T isolinux/. .
+> mkisofs -o <location of the new iso>/customCentos.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "custom CentOS 8 x86_64" -R -J -v -T isolinux/. .
 		
