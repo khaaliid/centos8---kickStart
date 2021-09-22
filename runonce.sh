@@ -5,9 +5,6 @@ then
 
    touch /tmp/runonce.log
    rm -f /tmp/runonce
-   echo "**** installing bind ****" >> /tmp/runonce.log
-
-   yum install -y --cacheonly --disablerepo=* /root/extras/bindRepo/Packages/*.rpm
 
    echo "**** installing k8s ****" >> /tmp/runonce.log
 
@@ -16,9 +13,7 @@ then
    yum remove -y runc
 
    echo "**** installing containerd ****" >> /tmp/runonce.log
-#   yum install -y --cacheonly --disablerepo=* /root/extras/dockerCeRepo/Packages/*.rpm
-   yum install -y --cacheonly --disablerepo=* /root/extras/dockerCeCliRepo/Packages/*.rpm
-#   yum remove -y runc
+
    yum install -y --cacheonly --disablerepo=* /root/extras/containerdRepo/Packages/*.rpm
    
    echo "**** configuring containerd ****" >> /tmp/runonce.log
