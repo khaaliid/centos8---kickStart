@@ -37,7 +37,7 @@ spec:
         ports:
         - containerPort: 5432
         volumeMounts:
-        - mountPath: /test
+        - mountPath: /var/lib/postgresql/data
           name: test-volume
         env:
           - name: POSTGRES_PASSWORD
