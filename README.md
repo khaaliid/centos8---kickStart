@@ -14,17 +14,23 @@ Procedures :
 
 a.	Create mount point.
 > mkdir -p /mnt/centos
+
 b.	Mount the iso to the mountpoint.
 > mount -o loop /tmp/CentOS-8.4.2105-x86_64-dvd1.iso /mnt/centos
+
 c.	Ensure the iso image is mounted.
 > df -h
-Filesystem                     Size  Used    Avail   Use%    Mounted on
+
+**Filesystem                     Size  Used    Avail   Use%    Mounted on**
+
 /tmp/CentOS-8.4.2105-x86_64-dvd1.iso 9.3G  9.3G     0       100%    /mnt/centos
 
 
 5-	Create another directory to be the working directory to customize the ISO Image
 > mkdir -p /data/custom_centos
+
 6-	Copy everything from the ISO image to the working directory (except the RPM directories).
+
 > rsync -av --progress /mnt/ /data/custom_centos/
 
 7- copy the hidden files as well 
