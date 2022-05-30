@@ -13,9 +13,9 @@ Procedures :
 4-	Mount the Iso file.
 
 a.	Create mount point.
-mkdir -p /mnt/centos
+> mkdir -p /mnt/centos
 b.	Mount the iso to the mountpoint.
-mount -o loop /tmp/CentOS-8.4.2105-x86_64-dvd1.iso /mnt/centos 
+> mount -o loop /tmp/CentOS-8.4.2105-x86_64-dvd1.iso /mnt/centos 
 c.	Ensure the iso image is mounted.
 > df -h
 Filesystem                     Size  Used    Avail   Use%    Mounted on
