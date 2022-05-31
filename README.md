@@ -27,11 +27,11 @@ c.	Ensure the iso image is mounted.
 
 
 5-	Create another directory to be the working directory to customize the ISO Image
-> mkdir -p /data/custom_centos
+> mkdir -p /data/custom_iso
 
 6-	Copy everything from the ISO image to the working directory (except the RPM directories).
 
-> rsync -av --progress /mnt/ /data/custom_centos/
+> rsync -av --progress /mnt/ /data/custom_iso/
 
 7- copy the hidden files as well 
 
@@ -79,7 +79,7 @@ c.	Ensure the iso image is mounted.
 4. Yaml dir: this will have the flannel and timescaledb yml files.
 
 12- change the isolinux/isolinux.cfg comment the existing append command to be as below to froce execute the kickstart file.
-
+```
 label linux
 
   menu label ^Auto Install CentOS Linux 8 with k8s
@@ -89,8 +89,9 @@ label linux
   append initrd=initrd.img inst.repo=cdrom ks=cdrom:/ks.cfg quiet
 \#comment below line  
 \# append initrd=initrd.img inst.stage2=hd:LABEL=CentOS-8-4-2105-x86_64-dvd quiet
-
+```
 13- recreate the iso image.
-cd /data/custom_centos
+
+> cd /data/custom_iso
 > mkisofs -o <location of the new iso>/customCentos.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "custom CentOS 8 x86_64" -R -J -v -T isolinux/. .
 		
