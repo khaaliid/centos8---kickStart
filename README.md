@@ -102,5 +102,6 @@ label linux
 13- recreate the iso image.
 
 > cd /data/custom_iso
+
 > mkisofs -o <location of the new iso>/customCentos.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "custom CentOS 8 x86_64" -R -J -v -T isolinux/. .
 		
