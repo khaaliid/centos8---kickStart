@@ -50,29 +50,38 @@ c.	Ensure the iso image is mounted.
  1. RPMs repo :
  
 	a- create containerdRepo/Packages dir under extra directory and add all the required containerd RPMs under it.
-		- I get the required RPMs by running following command 
-			> yumdownloader --assumeyes --destdir=/data/custom_iso/extras/containerdRepo/Packages --resolve containerd
-		- create the repo to be used during the installation :
-				> cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
+	- I get the required RPMs by running following command
+		
+		
+			yumdownloader --assumeyes --destdir=/data/custom_iso/extras/containerdRepo/Packages --resolve containerd
+			
+	- create the repo to be used during the installation :
+	
+			cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
 		  
 	b- create k8sRepo/Packages dir under extra directory and add all the required containerd RPMs under it.
-		- I get the required RPMs by running following command
-			> yumdownloader --assumeyes --destdir=/data/custom_iso/extras/k8sRepo/Packages --resolve yum-utils kubeadm-1.22.1
-		- create the repo to be used during the installation :
-			> cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
+	- I get the required RPMs by running following command
+	
+			yumdownloader --assumeyes --destdir=/data/custom_iso/extras/k8sRepo/Packages --resolve yum-utils kubeadm-1.22.1
+			
+	- create the repo to be used during the installation :
+	
+			cd /data/custom_iso/extras/containerdRepo/Packages && createrepo -dpo .. .
 	
  2. Images :
  
-	a- below images required for kubernetes 1.22.1 and flannel as a CNI plugin .. instead you can run the following command to get all the required kuberenets images from any machine has kubeadm instaled. => kubeadm config images list
-		kube-apiserver-v1.22.1.tar
-		kube-controller-manager-v1.22.1.tar
-		kube-scheduler-v1.22.1.tar
-		kube-proxy-v1.22.1.tar
-		pause:3.5.tar
-		flannel-v0.14.0.tar
-		etcd:3.5.0-0.tar
-		coredns-v1.8.4.tar
-		timescaledb-latest-pg11.tar
+	a- below images required for kubernetes 1.22.1 and flannel as a CNI plugin .. instead you can run the following command to get all the required kuberenets images from any machine has kubeadm instaled.
+	
+			kubeadm config images list
+				kube-apiserver-v1.22.1.tar
+				kube-controller-manager-v1.22.1.tar
+				kube-scheduler-v1.22.1.tar
+				kube-proxy-v1.22.1.tar
+				pause:3.5.tar
+				flannel-v0.14.0.tar
+				etcd:3.5.0-0.tar
+				coredns-v1.8.4.tar
+				timescaledb-latest-pg11.tar
 	
 3. the containerd utilities under extras dir (to be able to deal with the conatinerd i.e. ctr tool), the one used in the script is containerd-1.5.4-linux-amd64.tar.gz.
 
